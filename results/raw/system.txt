@@ -1,0 +1,29 @@
+$ uname -mrs
+Linux 7.1.13-aosc-main-16k loongarch64
+
+$ nproc
+8
+
+$ grep -E "Model Name|CPU MHz|Features" /proc/cpuinfo | head -3
+Model Name		: Loongson-3B6000M
+CPU MHz			: 2400.00
+Features		: cpucfg lam ual fpu lsx crc32 lspw lbt_x86 lbt_arm lbt_mips
+
+$ cpupower frequency-info
+分析 CPU 7：
+  该 CPU 上没有或未知的 cpufreq 驱动程序处于活动状态
+  以相同硬件频率运行的 CPU：Not Available
+  需要通过软件协调频率的 CPU：Not Available
+  最大转换延迟： Cannot determine or is not supported.
+Not Available
+
+$ cat /proc/sys/kernel/perf_event_paranoid
+2
+
+$ php -v
+PHP 8.5.12 (cli) (built: Oct 21 2026 14:59:05) (NTS)
+Copyright (c) The PHP Group
+
+$ php -i | grep -E "JIT|PCRE JIT Target"
+PCRE JIT Target => LOONGARCH 64bit (little endian + unaligned)
+JIT => Not Available

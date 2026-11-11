@@ -1,0 +1,6 @@
+cycles        24,561,084,659
+instructions  54,023,984,354
+IPC           2.20
+clock         2.38 GHz
+branches      9,306,610,350
+branch-misses 12,593,758 (0.135%)
