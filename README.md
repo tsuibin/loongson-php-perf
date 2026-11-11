@@ -25,6 +25,41 @@ Single-threaded, PHP 8.5.12 CLI, 10.3 s run:
 | Zend JIT | **Not Available** on LoongArch |
 | CPU frequency scaling | **no cpufreq driver** (fixed 2.4 GHz, no boost) |
 
+## Cross-machine comparison
+
+PHPBench 0.8.1 scores come from OpenBenchmarking result 2602027-NE-DD033050077
+(the same run Phoronix published). IPC is only measured on the machine in this
+repository; the Pi figure is **derived, not measured** (see the note below the table).
+
+| System | PHPBench 0.8.1 | vs 3B6000 | Single-core clock | IPC |
+|---|---|---|---|---|
+| Core Ultra 9 285K | 1,757,220 | 6.82x | 5.7 GHz | not measured |
+| Ryzen 9 9950X | 1,566,145 | 6.07x | 5.7 GHz | not measured |
+| Ryzen 7 9800X3D | 1,501,380 | 5.82x | 5.2 GHz | not measured |
+| Raspberry Pi 500+ (Cortex-A76 x4) | 420,699 | 1.63x | 2.4 GHz | **~3.6 (estimate)** |
+| Loongson 3B6000 (12C/24T) | 257,848 | 1.00x | not published | not measured |
+| Loongson 3B6000M (8C) — this repo | n/a (different workload) | n/a | 2.38 GHz measured | **2.20 measured** |
+
+**How the Pi IPC estimate is derived.** It assumes the 3B6000 in Phoronix's run has
+roughly the same single-thread IPC as the 3B6000M measured here (same LA664 core), and
+that both run near 2.4 GHz:
+
+```
+IPC(Pi) ~= IPC(3B6000M) x score(Pi) / score(3B6000)
+        ~= 2.20 x 420,699 / 257,848
+        ~= 3.6
+```
+
+This is an **upper-bound-style estimate with two assumptions** (identical IPC per core,
+identical clock). It has not been verified with `perf` on a Pi. To replace it with a
+real number, run:
+
+```bash
+N=100 PHP=php ./scripts/run-perf.sh    # on the Raspberry Pi 500+
+```
+
+and put the measured IPC into this table.
+
 ## Interpretation
 
 - **0.135 % branch misses** rules out branch prediction as the cause: this workload is
